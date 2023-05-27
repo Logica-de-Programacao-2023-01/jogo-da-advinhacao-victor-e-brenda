@@ -1,0 +1,65 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+var NumeroDeTentativas []int
+
+func main() {
+	fmt.Println("Este é o jogo da adivinhação!")
+	jogadas()
+}
+
+func jogadas() {
+	rand.Seed(time.Now().Unix())
+	numeroGerado := rand.Intn(100) + 1
+	var tentativas int
+
+	for {
+		var chute int
+		fmt.Println("Digite um número aleatório de 1 a 100:")
+		_, err := fmt.Scan(&chute)
+		if err != nil {
+			fmt.Println("Inválido.")
+			continue
+		}
+
+		tentativas++
+
+		if chute > numeroGerado {
+			fmt.Println("O número é menor.")
+		} else if chute < numeroGerado {
+			fmt.Println("O número é maior.")
+		} else {
+			fmt.Println("Parabéns, você acertou!")
+			break
+		}
+	}
+
+	fmt.Printf("Foram utilizadas %d tentativas.\n", tentativas)
+	NumeroDeTentativas = append(NumeroDeTentativas, tentativas)
+
+}
+
+func jogarDeNovo() {
+	fmt.Println("Gostaria de jogar novamente? (s/n): ")
+
+	var resposta string
+	_, err := fmt.Scan(&resposta)
+	if err != nil {
+		fmt.Println("Digite s ou n:")
+		return
+	}
+
+	if resposta == "s" || resposta == "S" {
+		jogadas()
+	} else {
+		fmt.Println("O jogo acabou.")
+		for i, tentativas := range NumeroDeTentativas {
+			fmt.Printf("Você utilizou %d tentativas na %dª jogada.\n", tentativas, i+1)
+		}
+	}
+}
